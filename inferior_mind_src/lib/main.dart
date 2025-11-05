@@ -5,25 +5,26 @@ void main() {
   runApp(const MasterMindApp());
 }
 
-class MasterMindApp extends StatelessWidget {
-  const MasterMindApp({Key? key}) : super(key: key);
+class MasterMindApp extends StatelessWidget {//essendo inizializzato come const, flutter può creare l'oggetto a compile time invece che a runtime
+  const MasterMindApp({Key? key}) : super(key: key);//Una Key serve a Flutter per identificare in modo univoco un widget nel suo widget tree, e passa la chiave alla superclasse cosi da fare gestire l'identitadel widget nel tree da StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp(//Per gestire navigazione,titoli e temi(colori)
       title: 'Master Mind',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        useMaterial3: true,
+        useMaterial3: true,//versione più recente guidelines design google
       ),
-      home: const MasterMindGame(),
+      home: const MasterMindGame(),//Home pe schermata iniziale
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class MasterMindGame extends StatefulWidget {
-  const MasterMindGame({Key? key}) : super(key: key);
+//Widget principale "contenitore" di gioco
+class MasterMindGame extends StatefulWidget {//puo cambiare col tempo
+  const MasterMindGame({Key? key}) : super(key: key);//costruttore widget,key identifica il widget nel tree di flutter
 
   @override
   State<MasterMindGame> createState() => _MasterMindGameState();
@@ -67,12 +68,12 @@ class _MasterMindGameState extends State<MasterMindGame> {
 
   @override
   void initState() {
-    super.initState();
-    _generateSecretCode();
+    super.initState();//chiama il metodo nella clase base state, inizializzando tutto
+    generateSecretCode();
   }
 
   
-  void _generateSecretCode() {
+  void generateSecretCode() {
     final random = Random();
     secretCode = List.generate(
       4,
@@ -81,7 +82,7 @@ class _MasterMindGameState extends State<MasterMindGame> {
   }
 
   
-  void _changeButtonColor(int buttonIndex) {
+  void changeButtonColor(int buttonIndex) {
     setState(() {
       colorIndices[buttonIndex] = 
           (colorIndices[buttonIndex] + 1) % availableColors.length;
@@ -92,8 +93,8 @@ class _MasterMindGameState extends State<MasterMindGame> {
   }
 
   
-  void _checkSequence() {
-    setState(() {
+  void checkSequenza() {
+    setState(() {//funziona come notify, avvisa il framework ch elo stato interno dell'oggetto è cambiato
       attempts++;
       if (playerSequence.any((color) => color == Colors.grey)) {
         feedbackMessage = 'Seleziona tutti i 4 colori!';
@@ -184,7 +185,7 @@ class _MasterMindGameState extends State<MasterMindGame> {
   
   void _resetGame() {
     setState(() {
-      _generateSecretCode();
+      generateSecretCode();
       playerSequence = [Colors.grey, Colors.grey, Colors.grey, Colors.grey];
       colorIndices = [0, 0, 0, 0];
       feedbackMessage = '';
@@ -243,7 +244,7 @@ class _MasterMindGameState extends State<MasterMindGame> {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: GestureDetector(
-                      onTap: () => _changeButtonColor(index),
+                      onTap: () => changeButtonColor(index),
                       child: Container(
                         width: 70,
                         height: 70,
@@ -272,7 +273,7 @@ class _MasterMindGameState extends State<MasterMindGame> {
 
               // Bottone di verifica
               ElevatedButton(
-                onPressed: _checkSequence,
+                onPressed: checkSequenza,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   foregroundColor: Colors.white,
